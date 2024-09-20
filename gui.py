@@ -50,3 +50,13 @@ class Interfaz:
         
         self.foto = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(imagen))
         self.lienzo.create_image(0, 0, image=self.foto, anchor=tk.NW)
+
+    def crear_entrada(self, texto_etiqueta, valor_inicial, comando):
+        marco = tk.Frame(self.tk)
+        marco.pack()
+        etiqueta = Label(marco, text=texto_etiqueta)
+        etiqueta.pack(side=tk.LEFT)
+        entrada = Entry(marco)
+        entrada.insert(0, str(valor_inicial))
+        entrada.pack(side=tk.LEFT)
+        entrada.bind("<Return>", lambda event: comando(entrada.get()))
