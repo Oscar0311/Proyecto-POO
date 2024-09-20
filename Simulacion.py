@@ -18,3 +18,7 @@ class Simulacion:
     def agregar_particula(self, x, y):
         particula = Particula(self, x, y)
         self.particulas.append(particula)
+
+    def actualizar(self):
+        for particula in self.particulas:
+            particula.actualizar()
