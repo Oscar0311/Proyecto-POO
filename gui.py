@@ -1,5 +1,7 @@
 from tkinter import Tk
 from tkinter import Canvas
+from tkinter import Entry
+from tkinter import Label
 import tkinter as tk
 import numpy as np
 import cv2
@@ -60,3 +62,11 @@ class Interfaz:
         entrada.insert(0, str(valor_inicial))
         entrada.pack(side=tk.LEFT)
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
+
+    def ejecutar(self):
+        while True:
+            if not self.simulacion.pausado:
+                self.simulacion.actualizar()
+            self.dibujar_particulas()
+            self.tk.update_idletasks()
+            self.tk.update()
