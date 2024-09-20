@@ -3,7 +3,7 @@ from Particula import *
 
 
 class Simulacion:
-    def _init_(self, ancho=650, alto=600):
+    def __init__(self, ancho=650, alto=600):
         self.ancho = ancho
         self.alto = alto
         self.particulas = []
