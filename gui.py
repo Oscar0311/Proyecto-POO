@@ -1,5 +1,7 @@
 from tkinter import Tk
 from tkinter import Canvas
+from tkinter import Entry
+from tkinter import Label
 import tkinter as tk
 import numpy as np
 import cv2
