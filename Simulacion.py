@@ -14,3 +14,7 @@ class Simulacion:
         self.fuerza_viento = np.array([0, 0])
         self.res_aire = 0.05
         self.friccion_suelo = 0.05
+    
+    def agregar_particula(self, x, y):
+        particula = Particula(self, x, y)
+        self.particulas.append(particula)
