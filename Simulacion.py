@@ -14,6 +14,3 @@ class Simulacion:
         self.fuerza_viento = np.array([0, 0])
         self.res_aire = 0.05
         self.friccion_suelo = 0.05
-    
-    def fuerza_aplicada(self, fuerza):
-        self.a += fuerza / float(abs(self.m)) 

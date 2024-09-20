@@ -15,3 +15,6 @@ class Particula:
         self.radio_repulsion = 10
         self.atraccion = 0.5
         self.repulsion = 1
+
+    def fuerza_aplicada(self, fuerza):
+        self.aceleracion += fuerza / float(abs(self.masa)) 
