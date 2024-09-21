@@ -64,7 +64,7 @@ class Interfaz:
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
     def ejecutar(self):
-        x = true
+        x = True
         while x == True:
             if not self.simulacion.pausado:
                 self.simulacion.actualizar()
