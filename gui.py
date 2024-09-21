@@ -26,7 +26,7 @@ class Interfaz:
         self.escala_velocidad.set(self.simulacion.velocidad)
         self.escala_velocidad.pack()
 
-        
+
         self.foto=None
 
     def set_gravedad(self, valor):
@@ -64,7 +64,8 @@ class Interfaz:
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
     def ejecutar(self):
-        while True:
+        x = true
+        while x == True:
             if not self.simulacion.pausado:
                 self.simulacion.actualizar()
             self.dibujar_particulas()
