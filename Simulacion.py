@@ -1,7 +1,6 @@
 import numpy as np
 from Particula import *
 
-
 class Simulacion:
     def __init__(self, ancho=650, alto=600):
         self.ancho = ancho
@@ -9,7 +8,7 @@ class Simulacion:
         self.particulas = []
         self.pausado = False
         self.velocidad = 0.1
-        self.temperatura = 0.5
+        self.temperatura = 1 
         self.vector_g = np.array([0, 0.1])
         self.fuerza_viento = np.array([0, 0])
         self.res_aire = 0.05
