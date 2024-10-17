@@ -63,9 +63,14 @@ class Interfaz:
         entrada.pack(side=tk.LEFT)
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
+    def agregar_particula_mouse(self, event):
+        x, y = event.x, event.y
+        self.simulacion.agregar_particula(x,y)
+
     def ejecutar(self):
-        x = True
-        while x == True:
+        self.lienzo.bind("<Button-1>", self.agregar_particula_mouse)
+        ejecutando = True
+        while ejecutando:
             if not self.simulacion.pausado:
                 self.simulacion.actualizar()
             self.dibujar_particulas()
