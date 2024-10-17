@@ -103,6 +103,6 @@ class Particula:
                         self.velocidad[0] = 0
                         self.velocidad[1] = 0
                 else:
-                    
+                            
                     self.y = self.radio
                     self.velocidad[1] *= -self.rebote
