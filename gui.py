@@ -1,7 +1,4 @@
-from tkinter import Tk
-from tkinter import Canvas
-from tkinter import Entry
-from tkinter import Label
+from tkinter import Tk, Canvas, Entry, Label, Button, Frame
 import tkinter as tk
 import numpy as np
 import cv2
@@ -14,23 +11,27 @@ class Interfaz:
         self.tk.title("Simulación de Partículas")
 
         self.lienzo = Canvas(self.tk, width=self.simulacion.ancho, height=self.simulacion.alto)
-        self.lienzo.pack()
+        self.lienzo.pack(side=tk.LEFT)
 
-        self.crear_entrada("Gravedad", self.simulacion.vector_g[1], self.set_gravedad)
+        self.controles = Frame(self.tk)
+        self.controles.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.crear_entrada("Gravedad", self.simulacion.vector_g, self.set_gravedad)
         self.crear_entrada("Resistencia del Aire", self.simulacion.res_aire, self.set_resistencia_aire)
         self.crear_entrada("Temperatura", self.simulacion.temperatura, self.set_temperatura)
         self.crear_entrada("Fricción del Suelo", self.simulacion.friccion_suelo, self.set_friccion_suelo)
         
-        
-        self.escala_velocidad = tk.Scale(self.tk, from_=0.1, to=5.0, resolution=0.1, orient=tk.HORIZONTAL, label="Velocidad de Simulación", command=self.set_velocidad)
+        self.escala_velocidad = tk.Scale(self.controles, from_=0.1, to=5.0, resolution=0.1, orient=tk.HORIZONTAL, label="Velocidad de Simulación", command=self.set_velocidad)
         self.escala_velocidad.set(self.simulacion.velocidad)
         self.escala_velocidad.pack()
 
+        self.boton_pausa = Button(self.controles, text="Pausar", command=self.toggle_pausa)
+        self.boton_pausa.pack()
 
-        self.foto=None
+        self.foto = None
 
     def set_gravedad(self, valor):
-        self.simulacion.vector_g[1] = float(valor)
+        self.simulacion.vector_g = float(valor)
 
     def set_resistencia_aire(self, valor):
         self.simulacion.res_aire = float(valor)
@@ -44,6 +45,10 @@ class Interfaz:
     def set_velocidad(self, valor):
         self.simulacion.velocidad = float(valor)
 
+    def toggle_pausa(self):
+        self.simulacion.pausado = not self.simulacion.pausado
+        self.boton_pausa.config(text="Reanudar" if self.simulacion.pausado else "Pausar")
+
     def dibujar_particulas(self):
         imagen = np.full((self.simulacion.alto, self.simulacion.ancho, 3), [255, 255, 255], dtype=np.uint8)
         
@@ -54,7 +59,7 @@ class Interfaz:
         self.lienzo.create_image(0, 0, image=self.foto, anchor=tk.NW)
 
     def crear_entrada(self, texto_etiqueta, valor_inicial, comando):
-        marco = tk.Frame(self.tk)
+        marco = tk.Frame(self.controles)
         marco.pack()
         etiqueta = Label(marco, text=texto_etiqueta)
         etiqueta.pack(side=tk.LEFT)
@@ -64,8 +69,7 @@ class Interfaz:
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
     def ejecutar(self):
-        x = True
-        while x == True:
+        while True:
             if not self.simulacion.pausado:
                 self.simulacion.actualizar()
             self.dibujar_particulas()
