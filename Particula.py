@@ -1,6 +1,6 @@
 import numpy as np
 import math
-
+#aaa
 class Particula:
     def __init__(self, simulacion, x, y, radio=4, color='random', masa=1, velocidad=np.zeros(2), rebote=0.7):
         self.simulacion = simulacion
@@ -103,6 +103,6 @@ class Particula:
                         self.velocidad[0] = 0
                         self.velocidad[1] = 0
                 else:
-                            
+
                     self.y = self.radio
                     self.velocidad[1] *= -self.rebote
