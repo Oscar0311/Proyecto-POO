@@ -69,11 +69,14 @@ class Interfaz:
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
     def agregar_particula_mouse(self, event):
-        x, y = event.x, event.y
-        self.simulacion.agregar_particula(x,y)
+        if self.modo_mouse.get() == "Agregar Partículas":
+            x, y = event.x, event.y
+            self.simulacion.agregar_particula(x, y)
 
     def ejecutar(self):
-        self.lienzo.bind("<Button-1>", self.agregar_particula_mouse)
+        self.lienzo.bind("<Button-1>", self.manejar_clic_izquierdo)
+        self.lienzo.bind("<B1-Motion>", self.arrastrar_particula)
+        self.lienzo.bind("<ButtonRelease-1>", self.finalizar_arrastre)
         ejecutando = True
         while ejecutando:
             if not self.simulacion.pausado:
@@ -81,3 +84,28 @@ class Interfaz:
             self.dibujar_particulas()
             self.tk.update_idletasks()
             self.tk.update()
+    def iniciar_arrastre(self, event):
+        if self.modo_mouse.get() == "Mover Partículas":
+            self.particula_seleccionada = None
+            encontrado = False
+            for particula in self.simulacion.particulas:
+                if encontrado:
+                    continue
+                distancia = np.linalg.norm(np.array([particula.x, particula.y]) - np.array([event.x, event.y]))
+                if distancia <= particula.radio:
+                    self.particula_seleccionada = particula
+                    encontrado = True
+    def arrastrar_particula(self, event):
+        if self.modo_mouse.get() == "Mover Partículas" and self.particula_seleccionada:
+            self.particula_seleccionada.x = event.x
+            self.particula_seleccionada.y = event.y
+
+    def finalizar_arrastre(self, event):
+        if self.modo_mouse.get() == "Mover Partículas":
+            self.particula_seleccionada = None
+
+    def manejar_clic_izquierdo(self, event):
+        if self.modo_mouse.get() == "Agregar Partículas":
+            self.agregar_particula_mouse(event)
+        elif self.modo_mouse.get() == "Mover Partículas":
+            self.iniciar_arrastre(event)
