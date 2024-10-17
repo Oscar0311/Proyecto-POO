@@ -52,8 +52,12 @@ class Particula:
                 else:
                     factor_resistencia_aire = 1
 
-                self.velocidad += np.clip(self.aceleracion, -2, 2) * factor_resistencia_aire
-                self.velocidad += np.random.uniform(-1, 1, 2) * self.simulacion.temperatura * factor_resistencia_aire
+                if self.simulacion.temperatura > 0:  # Evitamos temperaturas negativas
+                    self.velocidad += np.clip(self.aceleracion, -2, 2) * factor_resistencia_aire
+                    self.velocidad += np.random.uniform(-1, 1, 2) * math.sqrt(self.simulacion.temperatura) * factor_resistencia_aire  # El movimiento térmico depende de sqrt(T)
+                else:
+                    self.velocidad = np.zeros(2)  # Si la temperatura es 0K, no hay movimiento
+                    
                 self.x += self.velocidad[0]
                 self.y += self.velocidad[1]
 
