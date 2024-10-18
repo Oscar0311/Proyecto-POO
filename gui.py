@@ -5,7 +5,7 @@ import cv2
 import PIL.Image, PIL.ImageTk
 
 class Interfaz:
-    def __init__(self, simulacion):
+    def _init_(self, simulacion):
         self.simulacion = simulacion
         self.tk = Tk()
         self.tk.title("Simulación de Partículas")
@@ -30,6 +30,22 @@ class Interfaz:
 
         self.foto = None
 
+        self.modo_mouse = tk.StringVar(value="Agregar Partículas")
+        opciones_modo = ["Agregar Partículas", "Mover Partículas"]
+        self.menu_modo = tk.OptionMenu(self.controles, self.modo_mouse, *opciones_modo)
+        self.menu_modo.pack()
+
+        self.propiedades_particulas = Frame(self.tk)
+        self.propiedades_particulas.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.crear_entrada_propiedad("Radio", 4, self.set_radio)
+        self.crear_entrada_propiedad("Masa", 1, self.set_masa)
+        self.crear_entrada_propiedad("Rebote", 0.7, self.set_rebote)
+
+        self.radio = 4
+        self.masa = 1
+        self.rebote = 0.7
+
     def set_gravedad(self, valor):
         self.simulacion.vector_g = float(valor)
 
@@ -44,6 +60,15 @@ class Interfaz:
 
     def set_velocidad(self, valor):
         self.simulacion.velocidad = float(valor)
+
+    def set_radio(self, valor):
+        self.radio = int(valor)
+
+    def set_masa(self, valor):
+        self.masa = float(valor)
+
+    def set_rebote(self, valor):
+        self.rebote = float(valor)
 
     def toggle_pausa(self):
         self.simulacion.pausado = not self.simulacion.pausado
@@ -68,12 +93,20 @@ class Interfaz:
         entrada.pack(side=tk.LEFT)
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
-    def agregar_particula_mouse(self, event):
-        x, y = event.x, event.y
-        self.simulacion.agregar_particula(x,y)
+    def crear_entrada_propiedad(self, texto_etiqueta, valor_inicial, comando):
+        marco = tk.Frame(self.propiedades_particulas)
+        marco.pack()
+        etiqueta = Label(marco, text=texto_etiqueta)
+        etiqueta.pack(side=tk.LEFT)
+        entrada = Entry(marco)
+        entrada.insert(0, str(valor_inicial))
+        entrada.pack(side=tk.LEFT)
+        entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
     def ejecutar(self):
-        self.lienzo.bind("<Button-1>", self.agregar_particula_mouse)
+        self.lienzo.bind("<Button-1>", self.manejar_clic_izquierdo)
+        self.lienzo.bind("<B1-Motion>", self.arrastrar_particula)
+        self.lienzo.bind("<ButtonRelease-1>", self.finalizar_arrastre)
         ejecutando = True
         while ejecutando:
             if not self.simulacion.pausado:
@@ -81,3 +114,35 @@ class Interfaz:
             self.dibujar_particulas()
             self.tk.update_idletasks()
             self.tk.update()
+
+    def agregar_particula_mouse(self, event):
+        if self.modo_mouse.get() == "Agregar Partículas":
+            x, y = event.x, event.y
+            self.simulacion.agregar_particula(x, y, self.radio, self.masa, self.rebote)
+
+    def iniciar_arrastre(self, event):
+        if self.modo_mouse.get() == "Mover Partículas":
+            self.particula_seleccionada = None
+            encontrado = False
+            for particula in self.simulacion.particulas:
+                if encontrado:
+                    continue
+                distancia = np.linalg.norm(np.array([particula.x, particula.y]) - np.array([event.x, event.y]))
+                if distancia <= particula.radio:
+                    self.particula_seleccionada = particula
+                    encontrado = True
+
+    def arrastrar_particula(self, event):
+        if self.modo_mouse.get() == "Mover Partículas" and self.particula_seleccionada:
+            self.particula_seleccionada.x = event.x
+            self.particula_seleccionada.y = event.y
+
+    def finalizar_arrastre(self, event):
+        if self.modo_mouse.get() == "Mover Partículas":
+            self.particula_seleccionada = None
+
+    def manejar_clic_izquierdo(self, event):
+        if self.modo_mouse.get() == "Agregar Partículas":
+            self.agregar_particula_mouse(event)
+        elif self.modo_mouse.get() == "Mover Partículas":
+            self.iniciar_arrastre(event)
