@@ -6,7 +6,7 @@ class Simulacion:
         self.ancho = ancho
         self.alto = alto
         self.particulas = []
-        self.pausado = False
+        self.pausado = True
         self.temperatura = 300  # Temperatura inicial en Kelvin
         self.vector_g = np.array([0, 9.8])  # Gravedad estándar en m/s^2
         self.fuerza_viento = np.array([0, 0])

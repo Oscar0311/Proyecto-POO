@@ -25,7 +25,7 @@ class Interfaz:
         self.crear_entrada("Temperatura (K)", self.simulacion.temperatura, self.set_temperatura)
         self.crear_entrada("Fricción del Suelo", self.simulacion.friccion_suelo, self.set_friccion_suelo)
 
-        self.boton_pausa = Button(self.controles, text="Pausar", command=self.toggle_pausa, bg="lightblue")
+        self.boton_pausa = Button(self.controles, text="Play", command=self.toggle_pausa, bg="lightblue")
         self.boton_pausa.pack(pady=5)
 
         self.foto = None
@@ -71,7 +71,7 @@ class Interfaz:
 
     def toggle_pausa(self):
         self.simulacion.pausado = not self.simulacion.pausado
-        self.boton_pausa.config(text="Reanudar" if self.simulacion.pausado else "Pausar")
+        self.boton_pausa.config(text="Play" if self.simulacion.pausado else "Pausar")
 
     def dibujar_particulas(self):
         imagen = np.full((self.simulacion.alto, self.simulacion.ancho, 3), [255, 255, 255], dtype=np.uint8)
@@ -120,14 +120,14 @@ class Interfaz:
     def iniciar_arrastre(self, event):
         if self.modo_mouse.get() == "Mover Partículas":
             self.particula_seleccionada = None
-            encontrado = False
+            particula_encontrada = False
             for particula in self.simulacion.particulas:
-                if encontrado:
-                    continue
-                distancia = np.linalg.norm(np.array([particula.x, particula.y]) - np.array([event.x, event.y]))
-                if distancia <= particula.radio:
-                    self.particula_seleccionada = particula
-                    encontrado = True
+                if not particula_encontrada:
+                    distancia = np.linalg.norm(np.array([particula.x, particula.y]) - np.array([event.x, event.y]))
+                    if distancia <= particula.radio:
+                        self.particula_seleccionada = particula
+                        particula_encontrada = True
+
 
     def arrastrar_particula(self, event):
         if self.modo_mouse.get() == "Mover Partículas" and self.particula_seleccionada:
@@ -136,11 +136,13 @@ class Interfaz:
 
     def eliminar_particula(self, event):
         if self.modo_mouse.get() == "Eliminar Partículas":
+            particulas_a_eliminar = []
             for particula in self.simulacion.particulas:
                 distancia = np.linalg.norm(np.array([particula.x, particula.y]) - np.array([event.x, event.y]))
                 if distancia <= particula.radio:
-                    self.simulacion.particulas.remove(particula)
-                    break
+                    particulas_a_eliminar.append(particula)
+            for particula in particulas_a_eliminar:
+                self.simulacion.particulas.remove(particula)
 
     def finalizar_arrastre(self, event):
         if self.modo_mouse.get() == "Mover Partículas":
