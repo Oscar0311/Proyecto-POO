@@ -20,10 +20,6 @@ class Interfaz:
         self.crear_entrada("Resistencia del Aire", self.simulacion.res_aire, self.set_resistencia_aire)
         self.crear_entrada("Temperatura (K)", self.simulacion.temperatura, self.set_temperatura)
         self.crear_entrada("Fricción del Suelo", self.simulacion.friccion_suelo, self.set_friccion_suelo)
-        
-        self.escala_velocidad = tk.Scale(self.controles, from_=0.1, to=5.0, resolution=0.1, orient=tk.HORIZONTAL, label="Velocidad de Simulación", command=self.set_velocidad)
-        self.escala_velocidad.set(self.simulacion.velocidad)
-        self.escala_velocidad.pack()
 
         self.boton_pausa = Button(self.controles, text="Pausar", command=self.toggle_pausa)
         self.boton_pausa.pack()
@@ -146,4 +142,3 @@ class Interfaz:
             self.agregar_particula_mouse(event)
         elif self.modo_mouse.get() == "Mover Partículas":
             self.iniciar_arrastre(event)
-
