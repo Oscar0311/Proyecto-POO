@@ -56,45 +56,45 @@ class Particula:
                 else:
                     self.velocidad = np.zeros(2)  # Si la temperatura es 0K, no hay movimiento
 
-                self.x += self.velocidad
-                self.y += self.velocidad
+                self.x += self.velocidad[0]
+                self.y += self.velocidad[1]
 
             if self.x + self.radio >= self.simulacion.ancho:
                 self.x = self.simulacion.ancho - self.radio
-                self.velocidad *= -self.rebote
+                self.velocidad[0] *= -self.rebote
             if self.x - self.radio <= 0:
                 self.x = self.radio
-                self.velocidad *= -self.rebote
+                self.velocidad[0] *= -self.rebote
             if self.y + self.radio >= self.simulacion.alto:
-                if abs(self.velocidad) < 0.1 and abs(self.simulacion.vector_g) > 0:
+                if abs(self.velocidad[1]) < 0.1 and abs(self.simulacion.vector_g[1]) > 0:
                     self.y = self.simulacion.alto - self.radio
 
-                    if abs(self.velocidad) > 0.01:
-                        fuerza_friccion = -self.simulacion.friccion_suelo * math.copysign(1, self.velocidad)
+                    if abs(self.velocidad[0]) > 0.01:
+                        fuerza_friccion = -self.simulacion.friccion_suelo * math.copysign(1, self.velocidad[0])
                         aceleracion_friccion = fuerza_friccion / float(abs(self.masa))
-                        if abs(aceleracion_friccion) < abs(self.velocidad):
-                            self.velocidad += aceleracion_friccion
+                        if abs(aceleracion_friccion) < abs(self.velocidad[0]):
+                            self.velocidad[0] += aceleracion_friccion
                         else:
-                            self.velocidad = 0
+                            self.velocidad[0] = 0
                     else:
-                        self.velocidad = 0
-                        self.velocidad = 0
+                        self.velocidad[0] = 0
+                        self.velocidad[1] = 0
                 else:
                     self.y = self.simulacion.alto - self.radio
-                    self.velocidad *= -self.rebote
+                    self.velocidad[1] *= -self.rebote
 
             if self.y - self.radio <= 0:
-                if abs(self.velocidad) < 0.1 and abs(self.simulacion.vector_g) > 0:
-                    if abs(self.velocidad) > 0.01:
-                        fuerza_friccion = -self.simulacion.friccion_suelo * math.copysign(1, self.velocidad)
+                if abs(self.velocidad[1]) < 0.1 and abs(self.simulacion.vector_g[1]) > 0:
+                    if abs(self.velocidad[0]) > 0.01:
+                        fuerza_friccion = -self.simulacion.friccion_suelo * math.copysign(1, self.velocidad[0])
                         aceleracion_friccion = fuerza_friccion / float(abs(self.masa))
-                        if abs(aceleracion_friccion) < abs(self.velocidad):
+                        if abs(aceleracion_friccion) < abs(self.velocidad[0]):
                             self.velocidad += aceleracion_friccion
                         else:
-                            self.velocidad = 0
+                            self.velocidad[0] = 0
                     else:
-                        self.velocidad = 0
-                        self.velocidad = 0
+                        self.velocidad[0] = 0
+                        self.velocidad[1] = 0
                 else:
                     self.y = self.radio
-                    self.velocidad *= -self.rebote
+                    self.velocidad[1] *= -self.rebote
