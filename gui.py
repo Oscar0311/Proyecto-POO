@@ -6,37 +6,39 @@ import PIL.Image, PIL.ImageTk
 
 class Interfaz:
     def __init__(self, simulacion):
+        # Inicialización de la interfaz gráfica
         self.simulacion = simulacion
         self.tk = Tk()
         self.tk.title("Simulación de Partículas")
         self.tk.geometry("800x600")
 
-        # Lienzo para las partículas
+        # Lienzo para dibujar las partículas
         self.lienzo = Canvas(self.tk, width=self.simulacion.ancho, height=self.simulacion.alto, bg="white")
         self.lienzo.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        # Frame para los controles
+        # Frame para los controles de la simulación
         self.controles = Frame(self.tk)
         self.controles.pack(side=tk.RIGHT, fill=tk.Y, padx=10, pady=10)
 
-        # Controles para la simulación
+        # Creación de controles para ajustar parámetros de la simulación
         self.crear_entrada("Gravedad (m/s^2)", self.simulacion.vector_g[1], self.set_gravedad)
         self.crear_entrada("Resistencia del Aire", self.simulacion.res_aire, self.set_resistencia_aire)
         self.crear_entrada("Temperatura (K)", self.simulacion.temperatura, self.set_temperatura)
         self.crear_entrada("Fricción del Suelo", self.simulacion.friccion_suelo, self.set_friccion_suelo)
 
+        # Botón para pausar/reanudar la simulación
         self.boton_pausa = Button(self.controles, text="Play", command=self.toggle_pausa, bg="lightblue")
         self.boton_pausa.pack(pady=5)
 
         self.foto = None
 
-        # Menú para seleccionar el modo de interacción
+        # Menú desplegable para seleccionar el modo de interacción con el mouse
         self.modo_mouse = tk.StringVar(value="Agregar Partículas")
         opciones_modo = ["Agregar Partículas", "Mover Partículas", "Eliminar Partículas"]
         self.menu_modo = tk.OptionMenu(self.controles, self.modo_mouse, *opciones_modo)
         self.menu_modo.pack(pady=5)
 
-        # Controles para propiedades de partículas
+        # Controles para ajustar propiedades de las partículas
         self.propiedades_particulas = LabelFrame(self.controles, text="Propiedades de Partículas", padx=10, pady=10)
         self.propiedades_particulas.pack(fill=tk.Y, padx=10, pady=10)
 
@@ -44,10 +46,12 @@ class Interfaz:
         self.crear_entrada_propiedad("Masa", 1, self.set_masa)
         self.crear_entrada_propiedad("Rebote", 0.7, self.set_rebote)
 
+        # Valores por defecto para las propiedades de las partículas
         self.radio = 4
         self.masa = 1
         self.rebote = 0.7
 
+    # Métodos para actualizar parámetros de la simulación
     def set_gravedad(self, valor):
         self.simulacion.vector_g = float(valor)
 
@@ -60,6 +64,7 @@ class Interfaz:
     def set_friccion_suelo(self, valor):
         self.simulacion.friccion_suelo = float(valor)
 
+    # Métodos para actualizar propiedades de las partículas
     def set_radio(self, valor):
         self.radio = int(valor)
 
@@ -69,10 +74,12 @@ class Interfaz:
     def set_rebote(self, valor):
         self.rebote = float(valor)
 
+    # Método para pausar/reanudar la simulación
     def toggle_pausa(self):
         self.simulacion.pausado = not self.simulacion.pausado
         self.boton_pausa.config(text="Play" if self.simulacion.pausado else "Pausar")
 
+    # Método para dibujar las partículas en el lienzo
     def dibujar_particulas(self):
         imagen = np.full((self.simulacion.alto, self.simulacion.ancho, 3), [255, 255, 255], dtype=np.uint8)
         for particula in self.simulacion.particulas:
@@ -80,6 +87,7 @@ class Interfaz:
         self.foto = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(imagen))
         self.lienzo.create_image(0, 0, image=self.foto, anchor=tk.NW)
 
+    # Métodos auxiliares para crear controles en la interfaz
     def crear_entrada(self, texto_etiqueta, valor_inicial, comando):
         marco = tk.Frame(self.controles)
         marco.pack(pady=5)
@@ -100,7 +108,9 @@ class Interfaz:
         entrada.pack(side=tk.LEFT)
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
+    # Método principal para ejecutar la simulación
     def ejecutar(self):
+        # Vinculación de eventos del mouse
         self.lienzo.bind("<Button-1>", self.manejar_clic_izquierdo)
         self.lienzo.bind("<B1-Motion>", self.arrastrar_particula)
         self.lienzo.bind("<ButtonRelease-1>", self.finalizar_arrastre)
@@ -112,6 +122,7 @@ class Interfaz:
             self.tk.update_idletasks()
             self.tk.update()
 
+    # Métodos para manejar la interacción del mouse con las partículas
     def agregar_particula_mouse(self, event):
         if self.modo_mouse.get() == "Agregar Partículas":
             x, y = event.x, event.y
@@ -127,7 +138,6 @@ class Interfaz:
                     if distancia <= particula.radio:
                         self.particula_seleccionada = particula
                         particula_encontrada = True
-
 
     def arrastrar_particula(self, event):
         if self.modo_mouse.get() == "Mover Partículas" and self.particula_seleccionada:
