@@ -1,7 +1,7 @@
 import random
 from gui import *
-from particle import *
-from simulation import *
+from Particula import*
+from Simulacion import*
 
 if _name_ == "_main_":
     simulacion = Simulacion()

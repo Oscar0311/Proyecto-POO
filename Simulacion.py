@@ -1,5 +1,5 @@
 import numpy as np
-from particle import *
+from Particula import*
 
 class Simulacion:
     def _init_(self, ancho=650, alto=600):
