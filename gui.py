@@ -16,9 +16,9 @@ class Interfaz:
         self.controles = Frame(self.tk)
         self.controles.pack(side=tk.RIGHT, fill=tk.Y)
 
-        self.crear_entrada("Gravedad (m/s^2)", self.simulacion.vector_g[1], self.set_gravedad)
+        self.crear_entrada("Gravedad", self.simulacion.vector_g, self.set_gravedad)
         self.crear_entrada("Resistencia del Aire", self.simulacion.res_aire, self.set_resistencia_aire)
-        self.crear_entrada("Temperatura (K)", self.simulacion.temperatura, self.set_temperatura)
+        self.crear_entrada("Temperatura", self.simulacion.temperatura, self.set_temperatura)
         self.crear_entrada("Fricción del Suelo", self.simulacion.friccion_suelo, self.set_friccion_suelo)
         
         self.escala_velocidad = tk.Scale(self.controles, from_=0.1, to=5.0, resolution=0.1, orient=tk.HORIZONTAL, label="Velocidad de Simulación", command=self.set_velocidad)
@@ -47,7 +47,7 @@ class Interfaz:
         self.rebote = 0.7
 
     def set_gravedad(self, valor):
-        self.simulacion.vector_g[1] = float(valor)
+        self.simulacion.vector_g = float(valor)
 
     def set_resistencia_aire(self, valor):
         self.simulacion.res_aire = float(valor)
@@ -93,9 +93,15 @@ class Interfaz:
         entrada.pack(side=tk.LEFT)
         entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
-    def agregar_particula_mouse(self, event):
-        x, y = event.x, event.y
-        self.simulacion.agregar_particula(x,y)
+    def crear_entrada_propiedad(self, texto_etiqueta, valor_inicial, comando):
+        marco = tk.Frame(self.propiedades_particulas)
+        marco.pack()
+        etiqueta = Label(marco, text=texto_etiqueta)
+        etiqueta.pack(side=tk.LEFT)
+        entrada = Entry(marco)
+        entrada.insert(0, str(valor_inicial))
+        entrada.pack(side=tk.LEFT)
+        entrada.bind("<Return>", lambda event: comando(entrada.get()))
 
     def ejecutar(self):
         self.lienzo.bind("<Button-1>", self.manejar_clic_izquierdo)
@@ -108,3 +114,36 @@ class Interfaz:
             self.dibujar_particulas()
             self.tk.update_idletasks()
             self.tk.update()
+
+    def agregar_particula_mouse(self, event):
+        if self.modo_mouse.get() == "Agregar Partículas":
+            x, y = event.x, event.y
+            self.simulacion.agregar_particula(x, y, self.radio, self.masa, self.rebote)
+
+    def iniciar_arrastre(self, event):
+        if self.modo_mouse.get() == "Mover Partículas":
+            self.particula_seleccionada = None
+            encontrado = False
+            for particula in self.simulacion.particulas:
+                if encontrado:
+                    continue
+                distancia = np.linalg.norm(np.array([particula.x, particula.y]) - np.array([event.x, event.y]))
+                if distancia <= particula.radio:
+                    self.particula_seleccionada = particula
+                    encontrado = True
+
+    def arrastrar_particula(self, event):
+        if self.modo_mouse.get() == "Mover Partículas" and self.particula_seleccionada:
+            self.particula_seleccionada.x = event.x
+            self.particula_seleccionada.y = event.y
+
+    def finalizar_arrastre(self, event):
+        if self.modo_mouse.get() == "Mover Partículas":
+            self.particula_seleccionada = None
+
+    def manejar_clic_izquierdo(self, event):
+        if self.modo_mouse.get() == "Agregar Partículas":
+            self.agregar_particula_mouse(event)
+        elif self.modo_mouse.get() == "Mover Partículas":
+            self.iniciar_arrastre(event)
+
