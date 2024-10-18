@@ -2,7 +2,7 @@ import numpy as np
 import math
 #aaa
 class Particula:
-    def _init_(self, simulacion, x, y, radio, masa, rebote, color='random', velocidad=np.zeros(2)):
+    def __init__(self, simulacion, x, y, radio, masa, rebote, color='random', velocidad=np.zeros(2)):
         self.simulacion = simulacion
         self.x = x
         self.y = y

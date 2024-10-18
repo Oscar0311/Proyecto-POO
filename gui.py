@@ -5,7 +5,7 @@ import cv2
 import PIL.Image, PIL.ImageTk
 
 class Interfaz:
-    def _init_(self, simulacion):
+    def __init__(self, simulacion):
         self.simulacion = simulacion
         self.tk = Tk()
         self.tk.title("Simulación de Partículas")
