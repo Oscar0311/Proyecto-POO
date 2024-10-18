@@ -1,9 +1,9 @@
 import random
 from gui import *
-from Particula import*
-from Simulacion import*
+from Particula import *
+from Simulacion import *
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     simulacion = Simulacion()
     interfaz = Interfaz(simulacion)
 
