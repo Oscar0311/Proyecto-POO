@@ -53,7 +53,9 @@ class Interfaz:
 
     # Métodos para actualizar parámetros de la simulación
     def set_gravedad(self, valor):
-        self.__simulacion.set_vector_g(float(valor))
+        vector_g = self.__simulacion.get_vector_g()
+        vector_g[1] = valor
+        self.__simulacion.set_vector_g(vector_g)
 
     def set_resistencia_aire(self, valor):
         self.__simulacion.set_res_aire(float(valor))
