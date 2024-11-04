@@ -106,6 +106,7 @@ class Particula:
         if not self.__simulacion.get_pausado():
             # Aplicar gravedad
             self.__aceleracion = self.__simulacion.get_vector_g()
+            self.fuerza_aplicada(self.__simulacion.get_fuerza_viento()*self.__radio)
 
             for particula in self.__simulacion.get_particulas():
                 if particula != self:
