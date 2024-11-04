@@ -10,11 +10,15 @@ class Interfaz:
         self.__simulacion = simulacion
         self.__tk = Tk()
         self.__tk.title("Simulación de Partículas")
-        self.__tk.geometry("800x600")
+        self.__tk.geometry("900x650")
+
+        # Frame para el lienzo
+        self.__frame_lienzo = Frame(self.__tk)
+        self.__frame_lienzo.pack(side=tk.LEFT, padx=10, pady=10)
 
         # Lienzo para dibujar las partículas
-        self.__lienzo = Canvas(self.__tk, width=self.__simulacion.get_ancho(), height=self.__simulacion.get_alto(), bg="white")
-        self.__lienzo.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.__lienzo = Canvas(self.__frame_lienzo, width=self.__simulacion.get_ancho(), height=self.__simulacion.get_alto(), bg="white")
+        self.__lienzo.pack()
 
         # Frame para los controles de la simulación
         self.__controles = Frame(self.__tk)
