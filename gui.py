@@ -12,6 +12,14 @@ class Interfaz:
         self.__tk.title("Simulación de Partículas")
         self.__tk.geometry("900x650")
 
+        self.__encabezado = Label(
+            self.__tk, 
+            text="Simulación de Partículas\nIntegrantes: Marcelo Ixquiac, Luis Saavedra, Aldo Bolaños, Oscar García", 
+            font=("Arial", 14, "bold"), 
+            pady=10
+        )
+        self.__encabezado.pack(side=tk.TOP)
+
         # Frame para el lienzo
         self.__frame_lienzo = Frame(self.__tk)
         self.__frame_lienzo.pack(side=tk.LEFT, padx=10, pady=10)
