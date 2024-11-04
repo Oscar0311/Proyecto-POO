@@ -10,7 +10,7 @@ class Interfaz:
         self.__simulacion = simulacion
         self.__tk = Tk()
         self.__tk.title("Simulación de Partículas")
-        self.__tk.geometry("900x650")
+        self.__tk.geometry("900x720")
 
         self.__encabezado = Label(
             self.__tk, 
@@ -61,11 +61,15 @@ class Interfaz:
         self.crear_entrada_propiedad("Radio", 4, self.set_radio)
         self.crear_entrada_propiedad("Masa", 1, self.set_masa)
         self.crear_entrada_propiedad("Rebote", 0.7, self.set_rebote)
+        self.crear_entrada_propiedad("Velocidad en x", 0.0, self.set_velocidad_x)
+        self.crear_entrada_propiedad("Velocidad en y", 0.0, self.set_velocidad_y)
 
         # Valores por defecto para las propiedades de las partículas
         self.__radio = 4
         self.__masa = 1
         self.__rebote = 0.7
+        self.__velocidad_x = 0.0
+        self.__velocidad_y = 0.0
 
     def set_gravedad(self, valor):
         vector_g = self.__simulacion.get_vector_g()
@@ -89,6 +93,12 @@ class Interfaz:
 
     def set_rebote(self, valor):
         self.__rebote = float(valor)
+
+    def set_velocidad_x(self, valor):
+        self.__velocidad_x = float(valor)
+
+    def set_velocidad_y(self, valor):
+        self.__velocidad_y = float(valor)
 
     def toggle_pausa(self):
         self.__simulacion.set_pausado(not self.__simulacion.get_pausado()) 
@@ -141,7 +151,7 @@ class Interfaz:
     def agregar_particula_mouse(self, event):
         if self.__modo_mouse.get() == "Agregar Partículas":
             x, y = event.x, event.y
-            self.__simulacion.agregar_particula(x, y, self.__radio, self.__masa, self.__rebote)
+            self.__simulacion.agregar_particula(x, y, self.__radio, self.__masa, self.__rebote, np.array([self.__velocidad_x, -self.__velocidad_y]))
 
     def iniciar_arrastre(self, event):
         if self.__modo_mouse.get() == "Mover Partículas":

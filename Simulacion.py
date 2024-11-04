@@ -14,9 +14,9 @@ class Simulacion:
         self.__res_aire = 0.05  # Coeficiente de resistencia del aire
         self.__friccion_suelo = 0.05  # Coeficiente de fricción del suelo
     
-    def agregar_particula(self, x, y, radio, masa, rebote):
+    def agregar_particula(self, x, y, radio, masa, rebote, velocidad):
         # Método para agregar una nueva partícula a la simulación
-        particula = Particula(self, x, y, radio, masa, rebote)
+        particula = Particula(self, x, y, radio, masa, rebote, velocidad)
         self.__particulas.append(particula)
 
     def actualizar(self):
