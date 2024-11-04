@@ -23,6 +23,10 @@ class Particula:
     def get_simulacion(self):
         return self.__simulacion
     
+    def detener_movimiento(self):
+        # Método para detener el movimiento de la partícula
+        self.velocidad = np.array([0.0, 0.0])
+    
     def get_x(self):
         return self.__x
     

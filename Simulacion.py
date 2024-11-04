@@ -21,8 +21,13 @@ class Simulacion:
 
     def actualizar(self):
         # Método para actualizar el estado de todas las partículas en la simulación
-        for particula in self.__particulas:
-            particula.actualizar()
+        if self.__temperatura > 0:  # Solo actualizar si la temperatura es mayor que 0
+            for particula in self.__particulas:
+                particula.actualizar()
+        else:
+            # Si la temperatura es 0, las partículas no se mueven
+            for particula in self.__particulas:
+                particula.detener_movimiento()  # Método para detener partículas 
 
     def get_ancho(self):
         return self.__ancho
