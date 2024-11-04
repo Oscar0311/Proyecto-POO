@@ -104,13 +104,24 @@ class Particula:
     
     def fuerza_aplicada(self, fuerza):
         # Aplica una fuerza a la partícula, actualizando su aceleración
-        self.__aceleracion += fuerza / float(self.__masa) 
+        self.__aceleracion += fuerza / float(self.__masa)
+
+    def aplicar_temperatura(self):
+        # Obtiene la temperatura de la simulación
+        temperatura = self.__simulacion.get_temperatura()
+
+        # Factor de variación de velocidad en función de la temperatura
+        variacion = np.sqrt(temperatura) * 0.1  # Ajusta el factor para controlar la intensidad del temblor
+
+        # Aplica una variación aleatoria a la velocidad
+        self.__velocidad += np.random.uniform(-variacion, variacion, 2) 
 
     def actualizar(self):
         if not self.__simulacion.get_pausado():
-            # Aplicar gravedad
+            # Aplicar gravedad, temperatura y fuerza aplicada
             self.__aceleracion = self.__simulacion.get_vector_g()
             self.fuerza_aplicada(self.__simulacion.get_fuerza_viento()*self.__radio)
+            self.aplicar_temperatura()
 
             for particula in self.__simulacion.get_particulas():
                 if particula != self:
