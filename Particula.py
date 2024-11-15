@@ -143,8 +143,8 @@ class Particula:
                         particula.set_velocidad(velocidad_particula)
 
                         translate_vector = -direccion * (self.__radio + particula.get_radio()) + direccion * distancia
-                        self._x += translate_vector[0] * (self.__masa / (self.__masa + particula.get_masa()))
-                        self._y += translate_vector[1] * (self.__masa / (self.__masa + particula.get_masa()))
+                        self.__x += translate_vector[0] * (self.__masa / (self.__masa + particula.get_masa()))
+                        self.__y += translate_vector[1] * (self.__masa / (self.__masa + particula.get_masa()))
 
                         particula.set_x(particula.get_x() - translate_vector[0] * (particula.get_masa() / (self.__masa + particula.get_masa())))
                         particula.set_y(particula.get_y() - translate_vector[1] * (particula.get_masa() / (self.__masa + particula.get_masa())))
