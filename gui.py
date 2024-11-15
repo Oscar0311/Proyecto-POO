@@ -3,6 +3,7 @@ import tkinter as tk
 import numpy as np
 import cv2
 import PIL.Image, PIL.ImageTk
+from tooltips import tooltips
 
 class Interfaz:
     def __init__(self, simulacion):
@@ -70,6 +71,30 @@ class Interfaz:
         self.__rebote = 0.7
         self.__velocidad_x = 0.0
         self.__velocidad_y = 0.0
+
+            # Explicaciones para los controles de simulación
+        tooltips(self.__boton_pausa, "Pausa o reanuda la simulación")
+        tooltips(self.__menu_modo, "Selecciona el modo de interacción con el mouse: \n- Agregar Partículas: Añade nuevas partículas. \n- Mover Partículas: Desplaza partículas existentes. \n- Eliminar Partículas: Elimina partículas seleccionadas.")
+
+        # Explicaciones para los controles de parámetros de la simulación
+        tooltips(self.__controles.winfo_children()[0], "Gravedad: Ajusta la gravedad (m/s²) que afecta a las partículas.")
+        tooltips(self.__controles.winfo_children()[1], "Resistencia del Aire: Modifica la resistencia del aire que ralentiza las partículas.")
+        tooltips(self.__controles.winfo_children()[2], "Temperatura: Cambia la temperatura (K) del sistema.")
+        tooltips(self.__controles.winfo_children()[3], "Fricción del Suelo: Controla la fricción del suelo que desacelera las partículas.")
+
+        # Explicaciones para las propiedades de partículas
+        for widget in self.__propiedades_particulas.winfo_children():
+            etiqueta_texto = widget.winfo_children()[0].cget("text")
+            if "Radio" in etiqueta_texto:
+                tooltips(widget, "Radio: Define el tamaño de las partículas.")
+            elif "Masa" in etiqueta_texto:
+                tooltips(widget, "Masa: Establece la masa de cada partícula.")
+            elif "Rebote" in etiqueta_texto:
+                tooltips(widget, "Rebote: Determina la elasticidad de la colisión de las partículas.")
+            elif "Velocidad en x" in etiqueta_texto:
+                tooltips(widget, "Velocidad en x: Especifica la velocidad inicial de las partículas en el eje X.")
+            elif "Velocidad en y" in etiqueta_texto:
+                tooltips(widget, "Velocidad en y: Especifica la velocidad inicial de las partículas en el eje Y.")
 
     def set_gravedad(self, valor):
         vector_g = self.__simulacion.get_vector_g()
