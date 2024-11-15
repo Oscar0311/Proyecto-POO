@@ -4,6 +4,8 @@ import numpy as np
 import cv2
 import PIL.Image, PIL.ImageTk
 from tooltips import tooltips
+from tkinter import colorchooser  # Para abrir el selector de color
+
 
 class Interfaz:
     def __init__(self, simulacion):
@@ -12,7 +14,10 @@ class Interfaz:
         self.__tk = Tk()
         self.__tk.title("Simulación de Partículas")
         self.__tk.geometry("900x720")
-
+        # Menú para cambiar el color de fondo
+        self.__menu_color = tk.Menu(self.__tk)
+        self.__tk.config(menu=self.__menu_color)
+        self.__menu_color.add_command(label="Cambiar color de fondo", command=self.cambiar_color_fondo)
         self.__encabezado = Label(
             self.__tk, 
             text="Simulación de Partículas\nIntegrantes: Marcelo Ixquiac, Luis Saavedra, Aldo Bolaños, Oscar García", 
@@ -26,7 +31,8 @@ class Interfaz:
         self.__frame_lienzo.pack(side=tk.LEFT, padx=10, pady=10)
 
         # Lienzo para dibujar las partículas
-        self.__lienzo = Canvas(self.__frame_lienzo, width=self.__simulacion.get_ancho(), height=self.__simulacion.get_alto(), bg="white")
+        self.__color_fondo = "white"  # Color de fondo inicial
+        self.__lienzo = Canvas(self.__frame_lienzo, width=self.__simulacion.get_ancho(), height=self.__simulacion.get_alto(), bg=self.__color_fondo)
         self.__lienzo.pack()
 
         # Variables para el rectángulo de selección
@@ -71,7 +77,7 @@ class Interfaz:
         self.__rebote = 0.7
         self.__velocidad_x = 0.0
         self.__velocidad_y = 0.0
-
+    
             # Explicaciones para los controles de simulación
         tooltips(self.__boton_pausa, "Pausa o reanuda la simulación")
         tooltips(self.__menu_modo, "Selecciona el modo de interacción con el mouse: \n- Agregar Partículas: Añade nuevas partículas. \n- Mover Partículas: Desplaza partículas existentes. \n- Eliminar Partículas: Elimina partículas seleccionadas.")
@@ -95,12 +101,18 @@ class Interfaz:
                 tooltips(widget, "Velocidad en x: Especifica la velocidad inicial de las partículas en el eje X.")
             elif "Velocidad en y" in etiqueta_texto:
                 tooltips(widget, "Velocidad en y: Especifica la velocidad inicial de las partículas en el eje Y.")
+    def cambiar_color_fondo(self):
+        color = colorchooser.askcolor()[1]  # Devuelve el color seleccionado en formato hexadecimal
+        if color:
+            self.__lienzo.config(bg=color)  # Cambia el fondo del lienzo
+            self.__color_fondo = color  # Actualiza el color de fondo
+
 
     def set_gravedad(self, valor):
         vector_g = self.__simulacion.get_vector_g()
         vector_g[1] = valor
         self.__simulacion.set_vector_g(vector_g)
-
+   
     def set_resistencia_aire(self, valor):
         self.__simulacion.set_res_aire(float(valor))
 
