@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 class Particula:
-    def _init_(self, simulacion, x, y, radio, masa, rebote, velocidad, color='random'):
+    def __init__(self, simulacion, x, y, radio, masa, rebote, velocidad, color='random'):
         # Inicialización de los atributos de la partícula
         self.__simulacion = simulacion
         self.__x = x
@@ -25,7 +25,7 @@ class Particula:
     
     def detener_movimiento(self):
         # Método para detener el movimiento de la partícula
-        self.velocidad = np.array([0.0, 0.0])
+        self.__velocidad = np.array([0.0, 0.0])
     
     def get_x(self):
         return self.__x
@@ -104,7 +104,7 @@ class Particula:
     
     def fuerza_aplicada(self, fuerza):
         # Aplica una fuerza a la partícula, actualizando su aceleración
-        self._aceleracion += fuerza / float(self._masa)
+        self.__aceleracion += fuerza / float(self.__masa)
 
     def aplicar_temperatura(self):
         # Obtiene la temperatura de la simulación
@@ -119,53 +119,53 @@ class Particula:
     def actualizar(self):
         if not self.__simulacion.get_pausado():
             # Aplicar gravedad, temperatura y fuerza aplicada
-            self._aceleracion = self._simulacion.get_vector_g()
-            self.fuerza_aplicada(self._simulacion.get_fuerza_viento()*self._radio)
+            self.__aceleracion = self.__simulacion.get_vector_g()
+            self.fuerza_aplicada(self.__simulacion.get_fuerza_viento()*self.__radio)
             self.aplicar_temperatura()
 
             for particula in self.__simulacion.get_particulas():
                 if particula != self:
-                    direccion = np.array([particula.get_x(), particula.get_y()]) - np.array([self._x, self._y])
-                    distancia = math.sqrt(((particula.get_x() - self._x) ** 2) + ((particula.get_y() - self._y) ** 2))
+                    direccion = np.array([particula.get_x(), particula.get_y()]) - np.array([self.__x, self.__y])
+                    distancia = math.sqrt(((particula.get_x() - self.__x) ** 2) + ((particula.get_y() - self.__y) ** 2))
                     
                     if distancia != 0:
                         direccion = direccion / distancia
 
                     if distancia <= self.__radio + particula.get_radio():
                         temp = self.__velocidad[0]
-                        self._velocidad[0] = (self.masa - particula.get_masa()) / (self.masa + particula.get_masa()) * self.velocidad[0] + 2 * particula.get_masa() / (self.masa + particula.get_masa()) * particula.get_velocidad()[0] * self._rebote
+                        self.__velocidad[0] = (self.__masa - particula.get_masa()) / (self.__masa + particula.get_masa()) * self.__velocidad[0] + 2 * particula.get_masa() / (self.__masa + particula.get_masa()) * particula.get_velocidad()[0] * self.__rebote
                         velocidad_particula = particula.get_velocidad()
-                        velocidad_particula[0] = 2 * self._masa / (self.masa + particula.get_masa()) * temp + (particula.get_masa() - self.masa) / (self._masa + particula.get_masa()) * temp * particula.get_rebote()
+                        velocidad_particula[0] = 2 * self.__masa / (self.__masa + particula.get_masa()) * temp + (particula.get_masa() - self.__masa) / (self.__masa + particula.get_masa()) * temp * particula.get_rebote()
 
                         temp = self.__velocidad[1]
-                        self._velocidad[1] = (self.masa - particula.get_masa()) / (self.masa + particula.get_masa()) * self.velocidad[1] + 2 * particula.get_masa() / (self.masa + particula.get_masa()) * particula.get_velocidad()[1] * self._rebote
-                        velocidad_particula[1] = 2 * self._masa / (self.masa + particula.get_masa()) * temp + (particula.get_masa() - self.masa) / (self._masa + particula.get_masa()) * temp * particula.get_rebote()
+                        self.__velocidad[1] = (self.__masa - particula.get_masa()) / (self.__masa + particula.get_masa()) * self.__velocidad[1] + 2 * particula.get_masa() / (self.__masa + particula.get_masa()) * particula.get_velocidad()[1] * self.__rebote
+                        velocidad_particula[1] = 2 * self.__masa / (self.__masa + particula.get_masa()) * temp + (particula.get_masa() - self.__masa) / (self.__masa + particula.get_masa()) * temp * particula.get_rebote()
                         particula.set_velocidad(velocidad_particula)
 
                         translate_vector = -direccion * (self.__radio + particula.get_radio()) + direccion * distancia
-                        self._x += translate_vector[0] * (self.masa / (self._masa + particula.get_masa()))
-                        self._y += translate_vector[1] * (self.masa / (self._masa + particula.get_masa()))
+                        self.__x += translate_vector[0] * (self.__masa / (self.__masa + particula.get_masa()))
+                        self.__y += translate_vector[1] * (self.__masa / (self.__masa + particula.get_masa()))
 
                         particula.set_x(particula.get_x() - translate_vector[0] * (particula.get_masa() / (self.__masa + particula.get_masa())))
                         particula.set_y(particula.get_y() - translate_vector[1] * (particula.get_masa() / (self.__masa + particula.get_masa())))
 
-            if self._x + self.radio >=  self._simulacion.get_ancho():
-                self._x = self.simulacion.get_ancho() - self._radio
-                self._velocidad[0] *= -self._rebote
+            if self.__x + self.__radio >=  self.__simulacion.get_ancho():
+                self.__x = self.__simulacion.get_ancho() - self.__radio
+                self.__velocidad[0] *= -self.__rebote
 
-            if self._x - self._radio <= 0:
-                self._x = self._radio
-                self._velocidad[0] *= -self._rebote
+            if self.__x - self.__radio <= 0:
+                self.__x = self.__radio
+                self.__velocidad[0] *= -self.__rebote
             
-            if self._y + self.radio >=  self._simulacion.get_alto():
-                self._y = self.simulacion.get_alto() - self._radio
-                self._velocidad[1] *= -self._rebote
-                self._velocidad[0] *= self._simulacion.get_friccion_suelo()
+            if self.__y + self.__radio >=  self.__simulacion.get_alto():
+                self.__y = self.__simulacion.get_alto() - self.__radio
+                self.__velocidad[1] *= -self.__rebote
+                self.__velocidad[0] *= self.__simulacion.get_friccion_suelo()
 
-            if self._y - self._radio <= 0:
-                self._y = self._radio
-                self._velocidad[1] *= -self._rebote
+            if self.__y - self.__radio <= 0:
+                self.__y = self.__radio
+                self.__velocidad[1] *= -self.__rebote
 
-            self._velocidad +=  self._aceleracion * 0.1
-            self._x += self._velocidad[0]
-            self._y += self._velocidad[1]
+            self.__velocidad +=  self.__aceleracion * 0.1
+            self.__x += self.__velocidad[0]
+            self.__y += self.__velocidad[1]
