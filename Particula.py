@@ -104,7 +104,7 @@ class Particula:
     
     def fuerza_aplicada(self, fuerza):
         # Aplica una fuerza a la partícula, actualizando su aceleración
-        self.__aceleracion += fuerza / float(self._masa)
+        self.__aceleracion += fuerza / float(self.__masa)
 
     def aplicar_temperatura(self):
         # Obtiene la temperatura de la simulación
