@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 import PIL.Image, PIL.ImageTk
 from tooltips import tooltips
-from tkinter import colorchooser  # Para abrir el selector de color
 
 
 class Interfaz:
@@ -14,10 +13,7 @@ class Interfaz:
         self.__tk = Tk()
         self.__tk.title("Simulación de Partículas")
         self.__tk.geometry("900x720")
-        # Menú para cambiar el color de fondo
-        self.__menu_color = tk.Menu(self.__tk)
-        self.__tk.config(menu=self.__menu_color)
-        self.__menu_color.add_command(label="Cambiar color de fondo", command=self.cambiar_color_fondo)
+
         self.__encabezado = Label(
             self.__tk, 
             text="Simulación de Partículas\nIntegrantes: Marcelo Ixquiac, Luis Saavedra, Aldo Bolaños, Oscar García", 
@@ -101,11 +97,7 @@ class Interfaz:
                 tooltips(widget, "Velocidad en x: Especifica la velocidad inicial de las partículas en el eje X.")
             elif "Velocidad en y" in etiqueta_texto:
                 tooltips(widget, "Velocidad en y: Especifica la velocidad inicial de las partículas en el eje Y.")
-    def cambiar_color_fondo(self):
-        color = colorchooser.askcolor()[1]  # Devuelve el color seleccionado en formato hexadecimal
-        if color:
-            self.__lienzo.config(bg=color)  # Cambia el fondo del lienzo
-            self.__color_fondo = color  # Actualiza el color de fondo
+
 
 
     def set_gravedad(self, valor):
