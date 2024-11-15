@@ -5,14 +5,14 @@ class tooltips:
         self.__widget = widget
         self.__text = text
         self.__tooltip_window = None
-        # Bind events for showing and hiding the tooltip
+        # mostrar y esconder los tips
         widget.bind("<Enter>", self.__show_tooltip)
         widget.bind("<Leave>", self.__hide_tooltip)
 
     def __show_tooltip(self, event):
         if self.__tooltip_window or not self.__text:
             return
-        # Position the tooltip near the mouse
+        # posicionar tip cerca del mouse (se puede cambiar posicion)
         x = event.x_root + 20
         y = event.y_root + 10
         self.__tooltip_window = tw = tk.Toplevel(self.__widget)
