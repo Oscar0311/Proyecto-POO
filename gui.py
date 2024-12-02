@@ -5,7 +5,6 @@ import cv2
 import PIL.Image, PIL.ImageTk
 from tooltips import tooltips
 
-
 class Interfaz:
     def __init__(self, simulacion):
         # Inicialización de la interfaz gráfica
@@ -97,8 +96,6 @@ class Interfaz:
                 tooltips(widget, "Velocidad en x: Especifica la velocidad inicial de las partículas en el eje X.")
             elif "Velocidad en y" in etiqueta_texto:
                 tooltips(widget, "Velocidad en y: Especifica la velocidad inicial de las partículas en el eje Y.")
-
-
 
     def set_gravedad(self, valor):
         vector_g = self.__simulacion.get_vector_g()
